@@ -26,7 +26,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::group(['middleware' => ['role:super-admin|admin']], function() {
+    Route::group(['middleware-role' => ['role:super-admin|admin-support|customer-service']], function() {
 
     Route::resource('permissions', App\Http\Controllers\PermissionController::class);
     Route::get('permissions/{permissionId}/delete', [PermissionController::class, 'destroy']);

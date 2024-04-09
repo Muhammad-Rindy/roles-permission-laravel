@@ -16,7 +16,8 @@ class UserRolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Permissions
+
+        // Create permissions for each page
         Permission::create(['name' => 'view role']);
         Permission::create(['name' => 'create role']);
         Permission::create(['name' => 'update role']);
@@ -40,24 +41,14 @@ class UserRolePermissionSeeder extends Seeder
 
         // Create Roles
         $superAdminRole = Role::create(['name' => 'super-admin']); //as super-admin
-        $adminRole = Role::create(['name' => 'admin']);
-        $staffRole = Role::create(['name' => 'staff']);
-        $userRole = Role::create(['name' => 'user']);
+        $adminRole = Role::create(['name' => 'admin-support']); //as admin
+        $customerRole = Role::create(['name' => 'customer-service']); //as customer service
 
-        // Lets give all permission to super-admin role.
+        //  Gives all permision for super admin
         $allPermissionNames = Permission::pluck('name')->toArray();
-
         $superAdminRole->givePermissionTo($allPermissionNames);
 
-        // Let's give few permissions to admin role.
-        $adminRole->givePermissionTo(['create role', 'view role', 'update role']);
-        $adminRole->givePermissionTo(['create permission', 'view permission']);
-        $adminRole->givePermissionTo(['create user', 'view user', 'update user']);
-        $adminRole->givePermissionTo(['create product', 'view product', 'update product']);
-
-
-        // Let's Create User and assign Role to it.
-
+        // Create account super admin
         $superAdminUser = User::firstOrCreate([
                     'email' => 'superadmin@gmail.com',
                 ], [
@@ -68,19 +59,19 @@ class UserRolePermissionSeeder extends Seeder
 
         $superAdminUser->assignRole($superAdminRole);
 
-
+        // Create account admin
         $adminUser = User::firstOrCreate([
                             'email' => 'admin@gmail.com'
                         ], [
-                            'name' => 'Admin',
+                            'name' => 'Admin Support',
                             'email' => 'admin@gmail.com',
                             'password' => Hash::make ('12345678'),
                         ]);
 
         $adminUser->assignRole($adminRole);
 
-
-        $staffUser = User::firstOrCreate([
+        // Create account customer service
+        $customerUser = User::firstOrCreate([
                             'email' => 'staff@gmail.com',
                         ], [
                             'name' => 'Staff',
@@ -88,6 +79,6 @@ class UserRolePermissionSeeder extends Seeder
                             'password' => Hash::make('12345678'),
                         ]);
 
-        $staffUser->assignRole($staffRole);
+        $customerUser->assignRole($customerRole);
     }
 }
